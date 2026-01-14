@@ -12,7 +12,6 @@ async function getShowDetails(id: string) {
 }
 
 export default async function ShowPage({ params }: { params: Promise<{ id: string }> }) {
-  // On attend que les paramètres soient prêts (spécifique aux dernières versions Next.js)
   const { id } = await params;
   const show = await getShowDetails(id);
 
@@ -26,7 +25,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
         </Link>
       </div>
 
-      {/* HEADER AVEC IMAGE DE FOND (BACKDROP) */}
+      {/* HEADER */}
       <div style={{ 
         position: "relative", 
         height: "50vh", 
@@ -34,9 +33,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}>
-        {/* Un petit dégradé noir pour que le texte soit lisible */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #141414, transparent)" }}></div>
-        
         <div style={{ position: "absolute", bottom: "20px", left: "20px", right: "20px" }}>
             <h1 style={{ fontSize: "3rem", fontWeight: "bold", textShadow: "2px 2px 4px black" }}>{show.name}</h1>
             <div style={{ display: "flex", gap: "15px", marginTop: "10px", fontSize: "14px", fontWeight: "bold" }}>
@@ -47,14 +44,45 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
         </div>
       </div>
 
-      {/* CONTENU (SYNOPSIS) */}
       <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+        {/* SYNOPSIS */}
         <h2 style={{ borderBottom: "1px solid #333", paddingBottom: "10px", marginBottom: "10px" }}>Synopsis</h2>
-        <p style={{ lineHeight: "1.6", color: "#ccc" }}>{show.overview || "Aucun résumé disponible."}</p>
+        <p style={{ lineHeight: "1.6", color: "#ccc", marginBottom: "40px" }}>{show.overview || "Aucun résumé disponible."}</p>
         
-        {/* Ici, on ajoutera la liste des saisons plus tard */}
-      </div>
+    
+        <h2 style={{ borderBottom: "1px solid #333", paddingBottom: "10px", marginBottom: "20px" }}>Saisons</h2>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          {show.seasons.map((season: any) => (
+             // On ignore la "Saison 0" (les bonus) si elle est vide ou inintéressante, mais affichons tout pour l'instant
+            <div key={season.id} style={{ display: "flex", gap: "20px", backgroundColor: "#222", padding: "10px", borderRadius: "10px", alignItems: "center" }}>
+              
+              {/* Image de la saison */}
+              <div style={{ flexShrink: 0 }}>
+                {season.poster_path ? (
+                  <img 
+                    src={`https://image.tmdb.org/t/p/w200${season.poster_path}`} 
+                    alt={season.name}
+                    style={{ width: "60px", borderRadius: "5px" }} 
+                  />
+                ) : (
+                  <div style={{ width: "60px", height: "90px", background: "#333", borderRadius: "5px" }}></div>
+                )}
+              </div>
 
+              {/* Infos de la saison */}
+              <div>
+                <h3 style={{ margin: "0 0 5px 0", fontSize: "18px" }}>{season.name}</h3>
+                <p style={{ margin: 0, color: "#aaa", fontSize: "14px" }}>
+                  {season.episode_count} Épisodes • {season.air_date?.split("-")[0]}
+                </p>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
     </div>
   );
 }
