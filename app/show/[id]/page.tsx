@@ -53,33 +53,32 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
         <h2 style={{ borderBottom: "1px solid #333", paddingBottom: "10px", marginBottom: "20px" }}>Saisons</h2>
         
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-          {show.seasons.map((season: any) => (
-             // On ignore la "Saison 0" (les bonus) si elle est vide ou inintéressante, mais affichons tout pour l'instant
-            <div key={season.id} style={{ display: "flex", gap: "20px", backgroundColor: "#222", padding: "10px", borderRadius: "10px", alignItems: "center" }}>
-              
-              {/* Image de la saison */}
-              <div style={{ flexShrink: 0 }}>
-                {season.poster_path ? (
-                  <img 
-                    src={`https://image.tmdb.org/t/p/w200${season.poster_path}`} 
-                    alt={season.name}
-                    style={{ width: "60px", borderRadius: "5px" }} 
-                  />
-                ) : (
-                  <div style={{ width: "60px", height: "90px", background: "#333", borderRadius: "5px" }}></div>
-                )}
-              </div>
+         {show.seasons.map((season: any) => (
+  <Link 
+    key={season.id} 
+    href={`/show/${show.id}/season/${season.season_number}`}
+    style={{ textDecoration: "none", color: "white" }}
+  >
+    <div style={{ display: "flex", gap: "20px", backgroundColor: "#222", padding: "10px", borderRadius: "10px", alignItems: "center", transition: "background 0.2s" }}>
 
-              {/* Infos de la saison */}
-              <div>
-                <h3 style={{ margin: "0 0 5px 0", fontSize: "18px" }}>{season.name}</h3>
-                <p style={{ margin: 0, color: "#aaa", fontSize: "14px" }}>
-                  {season.episode_count} Épisodes • {season.air_date?.split("-")[0]}
-                </p>
-              </div>
+      <div style={{ flexShrink: 0 }}>
+          {season.poster_path ? (
+            <img src={`https://image.tmdb.org/t/p/w200${season.poster_path}`} alt={season.name} style={{ width: "60px", borderRadius: "5px" }} />
+          ) : (
+            <div style={{ width: "60px", height: "90px", background: "#333", borderRadius: "5px" }}></div>
+          )}
+      </div>
 
-            </div>
-          ))}
+      {/* Infos */}
+      <div>
+        <h3 style={{ margin: "0 0 5px 0", fontSize: "18px" }}>{season.name}</h3>
+        <p style={{ margin: 0, color: "#aaa", fontSize: "14px" }}>
+          {season.episode_count} Épisodes • {season.air_date?.split("-")[0]}
+        </p>
+      </div>
+    </div>
+  </Link>
+))}
         </div>
 
       </div>
