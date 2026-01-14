@@ -1,5 +1,5 @@
 import SearchBar from "./components/SearchBar";
-
+import Link from "next/link";
 // Fonction pour récupérer les Séries
 async function getShows(query: string | undefined) {
   const apiKey = process.env.TMDB_API_KEY;
@@ -35,22 +35,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
         {shows.map((show: any) => (
-          <div key={show.id} style={{ backgroundColor: "#222", borderRadius: "10px", overflow: "hidden" }}>
-             {show.poster_path ? (
-              <img 
-                src={`https://image.tmdb.org/t/p/w500${show.poster_path}`} 
-                alt={show.name}
-                style={{ width: "100%", height: "auto" }} 
-              />
-            ) : (
-              <div style={{ height: "300px", background: "#333", display:"flex", alignItems:"center", justifyContent:"center" }}>Pas d'image</div>
-            )}
-            <div style={{ padding: "10px" }}>
-              <h3 style={{ fontSize: "16px", margin: "0 0 5px 0" }}>{show.name}</h3>
-              <p style={{ fontSize: "14px", color: "#aaa", margin: 0 }}>⭐ {show.vote_average?.toFixed(1)}</p>
-            </div>
-          </div>
-        ))}
+  <Link key={show.id} href={`/show/${show.id}`} style={{ textDecoration: "none", color: "white" }}>
+    <div style={{ backgroundColor: "#222", borderRadius: "10px", overflow: "hidden", cursor: "pointer", transition: "transform 0.2s" }}>
+      {show.poster_path ? (
+        <img 
+          src={`https://image.tmdb.org/t/p/w500${show.poster_path}`} 
+          alt={show.name}
+          style={{ width: "100%", height: "auto" }} 
+        />
+      ) : (
+        <div style={{ height: "300px", background: "#333", display:"flex", alignItems:"center", justifyContent:"center" }}>Pas d'image</div>
+      )}
+      <div style={{ padding: "10px" }}>
+        <h3 style={{ fontSize: "16px", margin: "0 0 5px 0" }}>{show.name}</h3>
+        <p style={{ fontSize: "14px", color: "#aaa", margin: 0 }}>⭐ {show.vote_average?.toFixed(1)}</p>
+      </div>
+    </div>
+  </Link>
+))}
       </div>
     </div>
   );
